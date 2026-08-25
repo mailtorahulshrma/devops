@@ -3,6 +3,10 @@ name: Azure Login Test
 on:
   workflow_dispatch:
 
+  push:
+    branches:
+      - feature
+
 permissions:
   id-token: write
   contents: read
@@ -12,9 +16,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Azure Login
         uses: azure/login@v3
         with:
@@ -22,5 +23,5 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Check Azure Account
+      - name: Check Azure
         run: az account show
