@@ -1,27 +1,15 @@
-name: Azure Login Test
+trigger: none
 
-on:
-  workflow_dispatch:
+pool:
+  vmImage: ubuntu-latest
 
-  push:
-    branches:
-      - feature
-
-permissions:
-  id-token: write
-  contents: read
-
-jobs:
-  azure-login:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Azure Login
-        uses: azure/login@v3
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Check Azure
-        run: az account show
+steps:
+- task: AzureCLI@2
+  displayName: "Test Azure Service Principal Login"
+  inputs:
+    azureSubscription: "YOUR-SERVICE-CONNECTION-NAME"
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      echo "Login successful!"
+      az account show --output table
